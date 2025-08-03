@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public GenericResponse retrieveUser(Map headers) {
+        log.info("UserServiceImpl :: getUser : " + headers.toString());
         GenericResponse genericResponse = new GenericResponse();
         String auth = (String) headers.get("Authorization");
         if(auth == null) {
