@@ -29,7 +29,7 @@ public class ApplicationAdvice {
 
     @ExceptionHandler(UnexpectedTypeException.class)
     static ResponseEntity<GenericResponse> handleUnexpectedTypeException(UnexpectedTypeException ex){
-//        log.error("ApplicationAdvice :: UnexpectedTypeException ");
+        log.error("ApplicationAdvice :: UnexpectedTypeException ");
         ex.printStackTrace();
         GenericResponse genericResponse = new GenericResponse();
         if (ex.getCause() != null) {
@@ -42,7 +42,7 @@ public class ApplicationAdvice {
 
     @ExceptionHandler(AuthNotFoundException.class)
     static ResponseEntity<GenericResponse> handleAuthNotFoundException(AuthNotFoundException ex){
-//        log.error("ApplicationAdvice :: AuthNotFoundException ");
+        log.error("ApplicationAdvice :: AuthNotFoundException ");
         ex.printStackTrace();
         GenericResponse genericResponse = new GenericResponse();
         if (ex.getCause() != null) {

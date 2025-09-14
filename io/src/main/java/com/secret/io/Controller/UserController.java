@@ -1,10 +1,7 @@
 package com.secret.io.Controller;
 
 import com.secret.io.Service.UserService;
-import com.secret.io.dto.GenericResponse;
-import com.secret.io.dto.SecretUserDto;
 import com.secret.io.entity.SecretUser;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,16 +19,28 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    ResponseEntity<GenericResponse> saveUser(@Valid @RequestBody SecretUserDto secretUser) {
-        GenericResponse genericResponse = userService.saveUser(secretUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(genericResponse);
+    public ResponseEntity<?> register(@RequestBody Map<String, String> body) {
+        String userId = body.get("userId");
+        String password = body.get("password");
+
+        try {
+            SecretUser user = userService.registerUser(userId, password);
+            return ResponseEntity.ok(Map.of("message", "User registered successfully", "userId", user.getUserId()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+        }
     }
 
-    @GetMapping("/login")
-    ResponseEntity<GenericResponse> retrieveUser(@RequestHeader Map headers) {
-        GenericResponse genericResponse = userService.retrieveUser(headers);
-        return ResponseEntity.status(HttpStatus.OK).body(genericResponse);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        String userId = body.get("userId");
+        String password = body.get("password");
+
+        boolean isAuthenticated = userService.authenticateUser(userId, password);
+        if (isAuthenticated) {
+            return ResponseEntity.ok(Map.of("message", "Login successful"));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
+        }
     }
-
-
 }

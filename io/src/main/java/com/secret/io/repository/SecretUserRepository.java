@@ -7,4 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface SecretUserRepository extends MongoRepository<SecretUser, ObjectId> {
 
     SecretUser findByUserIdAndUserSecret(String userId, String userSecret);
+
+    SecretUser findByUserId(String userId);
 }
